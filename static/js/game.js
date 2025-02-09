@@ -32,7 +32,7 @@ class ImageMatchingGame {
         this.showLeaderboardButton = document.getElementById('showLeaderboard');
         this.closeButton = document.querySelector('.close');
         
-        // 닫기 버튼 표시 설정 (Tailwind 스타일과 충돌하지 않도록 inline 스타일 대신 CSS에서 제어해도 좋습니다)
+        // 닫기 버튼 표시 설정
         if (this.closeButton) {
             this.closeButton.style.display = 'block';
         }
@@ -311,11 +311,9 @@ class ImageMatchingGame {
         }
     }
 
-    // Tailwind를 고려하여 모달 보이기/숨기기를 hidden 클래스를 이용해 제어합니다.
     showLeaderboard() {
         this.updateLeaderboard().then(() => {
-            // 기존의 'show' 클래스 대신 'hidden' 클래스를 제거하여 모달을 표시합니다.
-            this.leaderboardModal.classList.remove('hidden');
+            this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
             // 모바일 스크롤 방지
@@ -327,8 +325,7 @@ class ImageMatchingGame {
     }
 
     hideLeaderboard() {
-        // 모달을 숨길 때 'hidden' 클래스를 추가합니다.
-        this.leaderboardModal.classList.add('hidden');
+        this.leaderboardModal.classList.remove('show');
         document.body.style.overflow = '';
         
         // 모바일 스크롤 복원
