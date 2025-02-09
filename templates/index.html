@@ -1,71 +1,57 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메모리 게임 🐶🎮</title>
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- 기존 스타일시트 링크 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="bg-gray-100 text-gray-800">
-
-    <!-- 게임 컨테이너 -->
-    <div class="game-container max-w-4xl mx-auto p-4">
-        <!-- 게임 헤더 -->
-        <div class="game-header mb-8">
-            <form id="gameForm" onsubmit="return false;" class="controls flex flex-col gap-4">
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <form id="gameForm" onsubmit="return false;" class="controls">
                 <div class="input-group">
-                    <input type="text" id="playerName" class="player-name-input p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    <input type="text" id="playerName" class="player-name-input" 
                            placeholder="이름을 입력하세요." required>
                 </div>
                 
                 <div class="input-group">
-                    <select id="difficulty" class="difficulty-select p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="difficulty" class="difficulty-select">
                         <option value="easy">Easy</option>
                         <option value="normal" selected>Normal</option>
                         <option value="hard">Hard</option>
                     </select>
                 </div>
                 
-                <div class="flex gap-4">
-                    <button id="startButton" type="button" class="game-button w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
-                        게임 시작
-                    </button>
-                    <button id="showLeaderboard" type="button" class="game-button w-full py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">
-                        리더보드
-                    </button>
-                </div>
+                <button id="startButton" type="button" class="game-button start-button">
+                    게임 시작
+                </button>
+                <button id="showLeaderboard" type="button" class="game-button leaderboard-button">
+                    리더보드
+                </button>
             </form>
             
-            <div id="gameStatus" class="game-status mt-6">
-                <div id="status" class="status-text text-xl font-semibold"></div>
-                <div id="timer" class="time-display text-lg font-medium"></div>
+            <div id="gameStatus" class="game-status">
+                <div id="status" class="status-text"></div>
+                <div id="timer" class="time-display"></div>
             </div>
         </div>
         
-        <!-- 게임 보드 -->
-        <div id="gameBoard" class="game-board grid grid-cols-4 gap-4 mx-auto mb-8"></div>
+        <div id="gameBoard" class="game-board"></div>
         
-        <!-- 리더보드 모달 -->
-        <div id="leaderboardModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
-            <div class="modal-content bg-white rounded-lg p-8 w-full max-w-lg">
-                <div class="modal-header flex justify-between items-center">
-                    <h2 class="text-2xl font-semibold">🏆 리더보드</h2>
-                    <span class="close text-2xl cursor-pointer">&times;</span>
+        <div id="leaderboardModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🏆 리더보드</h2>
+                    <span class="close">&times;</span>
                 </div>
-                <div class="modal-body mt-4">
-                    <table id="scoresTable" class="w-full text-sm text-left border-collapse">
+                <div class="modal-body">
+                    <table id="scoresTable">
                         <thead>
                             <tr>
-                                <th class="py-2 px-4 border-b">순위</th>
-                                <th class="py-2 px-4 border-b">플레이어</th>
-                                <th class="py-2 px-4 border-b">점수</th>
-                                <th class="py-2 px-4 border-b">난이도</th>
-                                <th class="py-2 px-4 border-b">소요시간</th>
+                                <th>순위</th>
+                                <th>플레이어</th>
+                                <th>점수</th>
+                                <th>난이도</th>
+                                <th>소요시간</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -74,7 +60,6 @@
             </div>
         </div>
     </div>
-
     <script src="/static/js/game.js"></script>
 </body>
 </html>
