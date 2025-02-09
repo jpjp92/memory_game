@@ -11,11 +11,12 @@ body {
     max-width: 900px;
     margin: 0.5rem auto 0;
     padding: 0 16px;
+   
+/*     min-height: 50vh; /* 최소 높이를 화면의 60%로 설정 */ */
     max-height: 50vh; /* 최대 높이 제한 */
     gap: 0.5rem; /* 컴포넌트 간격 줄임 */
 }
 
-/* 게임 헤더 */
 .game-header {
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
@@ -24,7 +25,6 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* 컨트롤 스타일 */
 .controls {
     display: flex;
     gap: 16px;
@@ -37,6 +37,7 @@ body {
     flex: 1;
     min-width: 200px;
 }
+
 
 /* 입력 필드 스타일 */
 .player-name-input {
@@ -154,7 +155,7 @@ body {
     background: linear-gradient(to right, #f8f9fa, #ffffff);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    flex: 1;
+    flex:1 ;  /* 추가 */
 }
 
 /* 카드 스타일 */
@@ -188,7 +189,7 @@ body {
 }
 
 .card.flipped {
-    transform: rotateY(360deg);
+    transform: rotateY(180deg);
     background-color: white;
 }
 
@@ -315,17 +316,17 @@ body {
     .game-button {
         width: 100%;
     }
-
     .game-container {
         margin: 0 auto;      /* 중앙 정렬 */
         padding: 1px;
-        min-height: 20vh;
+        min-height: 100vh;
+        justify-content: space-between;
     }
     .game-board {
         grid-template-columns: repeat(3, 1fr);
         gap: 4px;
         margin: 0 auto;      /* 중앙 정렬 */
-        min-height: 20vh;
+        min-height: 100vh;
         padding: 1px;
     }
     
