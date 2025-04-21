@@ -14,10 +14,14 @@ class ImageMatchingGame {
         this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.touchStartY = 0;
         
+        // 화면 크기 변경 감지
+        window.addEventListener('resize', () => this.handleResize());
+        
         document.addEventListener('DOMContentLoaded', () => {
             this.initializeElements();
             this.addEventListeners();
             this.setupGameBoard();
+            this.preventScrolling();
         });
     }
 
@@ -71,6 +75,46 @@ class ImageMatchingGame {
         });
     }
 
+    // 새로운 메소드: 화면 크기 변경 처리
+    handleResize() {
+        if (this.gameBoard) {
+            // 모바일 모드 재설정
+            this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+            
+            // 게임 보드 크기 조정
+            this.setupGameBoardLayout();
+        }
+    }
+
+    // 새로운 메소드: 게임 보드 레이아웃 설정
+    setupGameBoardLayout() {
+        // 난이도별 클래스 갱신
+        this.gameBoard.className = 'game-board ' + this.mode;
+    }
+
+    // 새로운 메소드: 스크롤 방지
+    preventScrolling() {
+        // 터치 이벤트 리스너 추가
+        document.addEventListener('touchmove', (e) => {
+            // 게임 보드 내에서는 스크롤을 허용
+            if (this.gameBoard.contains(e.target) || 
+                (this.leaderboardModal && this.leaderboardModal.contains(e.target))) {
+                return;
+            }
+            // 기본 스크롤 동작 방지
+            e.preventDefault();
+        }, { passive: false });
+        
+        // iOS에서 바운스 효과 방지
+        document.addEventListener('touchstart', (e) => {
+            this.touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', () => {
+            this.touchStartY = 0;
+        }, { passive: true });
+    }
+
     preloadImages(imageNumbers) {
         const promises = imageNumbers.map(n => {
             return new Promise((resolve, reject) => {
@@ -121,6 +165,9 @@ class ImageMatchingGame {
         const numCards = this.getCardCount();
         const numPairs = numCards / 2;
         
+        // 난이도에 따른 클래스 추가
+        this.gameBoard.className = 'game-board ' + this.mode;
+        
         let imageNumbers = Array.from({length: this.totalImages}, (_, i) => i + 1);
         this.shuffleArray(imageNumbers);
         imageNumbers = imageNumbers.slice(0, numPairs);
@@ -136,8 +183,11 @@ class ImageMatchingGame {
         let images = imageNumbers.flatMap(n => [`/static/images/${n}.jpg`, `/static/images/${n}.jpg`]);
         this.shuffleArray(images);
 
-        const gridColumns = this.getGridColumns();
-        this.gameBoard.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
+        // 모바일이 아닐 경우에만 직접 스타일 조정 (모바일은 CSS로 처리)
+        if (!this.isMobile) {
+            const gridColumns = this.getGridColumns();
+            this.gameBoard.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
+        }
 
         images.forEach((img, index) => {
             const card = document.createElement('div');
@@ -316,9 +366,10 @@ class ImageMatchingGame {
             this.leaderboardModal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
-            // 모바일 스크롤 방지
+            // 모바일 화면 고정
             if (this.isMobile) {
                 document.body.style.position = 'fixed';
+                document.body.style.top = '-' + window.scrollY + 'px';
                 document.body.style.width = '100%';
             }
         });
@@ -326,13 +377,17 @@ class ImageMatchingGame {
 
     hideLeaderboard() {
         this.leaderboardModal.classList.remove('show');
-        document.body.style.overflow = '';
         
-        // 모바일 스크롤 복원
+        // 모바일 화면 복원
         if (this.isMobile) {
+            const scrollY = document.body.style.top;
             document.body.style.position = '';
+            document.body.style.top = '';
             document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
         }
+        
+        document.body.style.overflow = 'hidden'; // 전체 페이지는 계속 스크롤 방지
     }
 
     maskPlayerName(name) {
@@ -411,13 +466,4 @@ class ImageMatchingGame {
         this.startButton.disabled = false;
         this.playerNameInput.disabled = false;
         this.gameStarted = false;
-        this.preloadedImages.clear();
-        this.setupGameBoard();
-        this.remainingTime = this.timeLimit;
-        this.updateTimer();
-        this.statusLabel.textContent = '';
-    }
-}
-
-// 게임 인스턴스 생성
-const game = new ImageMatchingGame();
+        this.preloadedImages.
