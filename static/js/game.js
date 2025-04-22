@@ -284,8 +284,11 @@ class ImageMatchingGame {
     
     async saveScore(success) {
         const timeTaken = Math.floor((Date.now() - this.gameStartTime) / 1000);
-        const score = this.calculateScore(success, timeTaken);
-
+        // const score = this.calculateScore(success, timeTaken);
+        let score = this.calculateScore(success, timeTaken);
+    
+        // 점수를 반올림하여 정수로 변환
+        score = Math.round(score);
         try {
             const response = await fetch('/api/scores', {
                 method: 'POST',
