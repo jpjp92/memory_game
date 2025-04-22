@@ -279,7 +279,7 @@ class ImageMatchingGame {
             'hard': 2.0
         }[this.mode];
         
-        return Math.max(0, Math.floor((baseScore - timePenalty) * difficultyMultiplier));
+        return (baseScore - timePenalty) * difficultyMultiplier; // 소수점 유지
     }
     
     async saveScore(success) {
@@ -347,7 +347,16 @@ class ImageMatchingGame {
             const response = await fetch('/api/scores');
             if (!response.ok) throw new Error('리더보드 데이터 가져오기 실패');
             
-            const scores = await response.json();
+            let scores = await response.json();
+            
+            // 점수 내림차순, 점수가 같으면 시간 오름차순으로 정렬
+            scores.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score; // 점수 내림차순
+                }
+                return a.time_taken - b.time_taken; // 시간이 적은 순 (오름차순)
+            });
+
             const tbody = document.querySelector('#scoresTable tbody');
             tbody.innerHTML = '';
             
@@ -371,7 +380,7 @@ class ImageMatchingGame {
                 }
                 
                 row.insertCell().textContent = score.player_name;
-                row.insertCell().innerHTML = `<span class="highlight-score">${score.score}</span>`;
+                row.insertCell().innerHTML = `<span class="highlight-score">${Math.floor(score.score)}</span>`; // 표시할 때만 소수점 제거
                 row.insertCell().textContent = score.difficulty;
                 row.insertCell().textContent = `${score.time_taken}초`;
                 
