@@ -364,7 +364,7 @@ body {
         margin: 0 auto;
         padding: 0 4px;
         box-sizing: border-box;
-        min-height: 30vh;      /* 추가: 모바일에서 화면을 꽉 채움 */
+        min-height: 100vh;      /* 추가: 모바일에서 화면을 꽉 채움 */
         max-height: none;       /* 추가: 모바일에서 높이 제한 해제 */
         display: flex;          /* 추가: 내부를 세로 정렬 */
         flex-direction: column; /* 추가 */
