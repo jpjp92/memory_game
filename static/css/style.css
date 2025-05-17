@@ -8,7 +8,7 @@ body {
 
 /* 기본 컨테이너 및 컨트롤 */
 .game-container {
-    max-width: 900px;
+    max-width: 800px;
     margin: 0.5rem auto 0;
     padding: 0 16px;
    
@@ -364,10 +364,15 @@ body {
         margin: 0 auto;
         padding: 0 4px;
         box-sizing: border-box;
+        min-height: 100vh;      /* 추가: 모바일에서 화면을 꽉 채움 */
+        max-height: none;       /* 추가: 모바일에서 높이 제한 해제 */
+        display: flex;          /* 추가: 내부를 세로 정렬 */
+        flex-direction: column; /* 추가 */
     }
     .game-board {
         width: 100%;
         min-width: 0;
         max-width: 100%;
+        flex: 1;                /* 추가: 남는 공간을 채움 */
     }
 }
